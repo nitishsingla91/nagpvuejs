@@ -1,5 +1,5 @@
 <template>
-<div class="home-page">
+  <div class="home-page">
 
   <div class="banner">
     <div class="container">
@@ -14,35 +14,21 @@
       <div class="col-md-9">
         <div class="feed-toggle">
           <ul class="nav nav-pills outline-active">
+            <!-- <li class="nav-item">
+              <a class="nav-link disabled" href="">Your Feed</a>
+            </li> -->
             <li class="nav-item">
-             <a
-                  class="nav-link"
-                  v-if="username"
-                  @click="setFeed('user');"
-                  :class="{ active: activeFeed === 'user' }"
-                >
-                  Your Feed
-                </a>
-            </li>
-            <li class="nav-item">
-               <a
-                  class="nav-link"
-                  @click="setFeed('global');"
-                  :class="{ active: activeFeed === 'global' }"
-                >
-                  Global Feed
-                </a>
+              <a class="nav-link active" href="">Global Feed</a>
             </li>
           </ul>
         </div>
 
-       <ArticlePreview
-            v-for="article in globalArticles"
-            :key="article.slug"
-            :article="article"
-          ></ArticlePreview>
-
-       
+        <article-preview
+          v-for="(article, index) in articles"
+          :key="article.slug + index"
+          :article="article"
+        >
+        </article-preview>
 
       </div>
 
@@ -51,14 +37,14 @@
           <p>Popular Tags</p>
 
           <div class="tag-list">
-            <a href="" class="tag-pill tag-default">programming</a>
-            <a href="" class="tag-pill tag-default">javascript</a>
-            <a href="" class="tag-pill tag-default">emberjs</a>
-            <a href="" class="tag-pill tag-default">angularjs</a>
-            <a href="" class="tag-pill tag-default">react</a>
-            <a href="" class="tag-pill tag-default">mean</a>
-            <a href="" class="tag-pill tag-default">node</a>
-            <a href="" class="tag-pill tag-default">rails</a>
+            <a
+              v-for='tag in tags'
+              :key="tag"
+              href="#"
+              class="tag-pill tag-default"
+            >
+              {{tag}}
+            </a>
           </div>
         </div>
       </div>
@@ -68,40 +54,33 @@
 
 </div>
 </template>
-
-
 <script>
-import ArticlePreview from "@/components/ArticlePreview.vue";
+import ApiService from '@/api'
+import ArticlePreview from '@/components/ArticlePreview.vue'
 export default {
   components: {
     ArticlePreview
   },
-  methods: {
-    setFeed(feedType) {
-      if (feedType === "global") {
-        this.activeFeed = "global";
-        this.$store.dispatch("articles/getGlobalFeed");
-      } else if (feedType === "user") {
-        this.activeFeed = "user";
-        this.$store.dispatch("articles/getUserFeed");
-      }
-    }
+  data () {
+    return {}
   },
-  created() {
-    this.setFeed("global");
+  created () {
+    ApiService.get('articles')
+      .then(({data}) => {
+        this.$store.commit('getMultipleArticle', data.articles)
+      })
+    ApiService.get('tags')
+      .then(({data}) => {
+        this.$store.commit('getHomeTags', data.tags)
+      })
   },
   computed: {
-    globalArticles() {
-      return this.$store.state.articles.feed || [];
+    articles () {
+      return this.$store.state.articles
     },
-    username() {
-      return this.$store.getters["users/username"];
+    tags () {
+      return this.$store.state.tags
     }
-  },
-  data: function() {
-    return {
-      activeFeed: "global"
-    };
   }
-};
+}
 </script>

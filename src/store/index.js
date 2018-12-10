@@ -7,11 +7,24 @@ Vue.use(Vuex);
 
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    articles: [],
+    tags: []
+  },
+  mutations: {
+    getMultipleArticle (state, articles) {
+      state.articles = articles
+    },
+    getHomeTags (state, tags) {
+      state.tags = tags
+    }
+  },
   actions: {},
   modules: {
     users,
     articles
   }
 });
+
+
+
