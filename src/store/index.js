@@ -2,27 +2,19 @@ import Vue from "vue";
 import Vuex from "vuex";
 import users from "./modules/user";
 import articles from "./modules/articles";
+import home from "@/store/modules/home";
 
 Vue.use(Vuex);
 
 
 export default new Vuex.Store({
-  state: {
-    articles: [],
-    tags: []
-  },
-  mutations: {
-    getMultipleArticle (state, articles) {
-      state.articles = articles
-    },
-    getHomeTags (state, tags) {
-      state.tags = tags
-    }
-  },
+  state: {},
+  mutations: {},
   actions: {},
   modules: {
     users,
-    articles
+    articles,
+    home
   }
 });
 

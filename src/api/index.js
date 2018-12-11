@@ -52,3 +52,14 @@ const ApiService = {
 }
 
 export default ApiService
+
+export const TagsService = {
+    get () {
+      return ApiService.get('tags')
+    }
+  }
+   export const HomeArticles = {
+    get () {
+      return ApiService.get('articles')
+    }
+}

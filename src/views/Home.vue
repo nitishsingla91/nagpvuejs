@@ -30,6 +30,8 @@
         >
         </article-preview>
 
+        
+
       </div>
 
       <div class="col-md-3">
@@ -56,6 +58,7 @@
 </template>
 <script>
 import ApiService from '@/api'
+import {FETCH_TAGS, FETCH_ARTICLES} from '@/store/actions.type'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 export default {
   components: {
@@ -65,14 +68,9 @@ export default {
     return {}
   },
   created () {
-    ApiService.get('articles')
-      .then(({data}) => {
-        this.$store.commit('getMultipleArticle', data.articles)
-      })
-    ApiService.get('tags')
-      .then(({data}) => {
-        this.$store.commit('getHomeTags', data.tags)
-      })
+     this.$store.dispatch(FETCH_TAGS)
+    this.$store.dispatch(FETCH_ARTICLES)
+    
   },
   computed: {
     articles () {
