@@ -15,7 +15,7 @@ const ApiService = {
 
   query (resource, params) {
     return Vue.axios
-      .get(resource, params)
+      .get(resource,{params})
       .catch((error) => {
         throw new Error(`[RWV] ApiService ${error}`)
       })
@@ -59,7 +59,12 @@ export const TagsService = {
     }
   }
    export const HomeArticles = {
-    get () {
-      return ApiService.get('articles')
+    get (params) {
+      return ApiService.get('articles', params)
     }
+}
+
+export const Article = {
+  get () {
+   }
 }

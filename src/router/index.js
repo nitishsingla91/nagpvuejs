@@ -39,7 +39,7 @@ export default new Router({
       component: () => import("@/views/ArticleEdit.vue")
     },
     {
-      path: "/article/:article_slug",
+      path: "/articles/:article_slug",
       name: "article",
       component: () => import("@/views/Article.vue")
     },
