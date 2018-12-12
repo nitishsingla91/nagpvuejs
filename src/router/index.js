@@ -1,7 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home.vue";
-
+import HomeFeed from '@/views/HomeFeed'
+import HomeTag from '@/views/HomeTag'
+import HomeGlobal from '@/views/HomeGlobal'
 
 
 Vue.use(Router);
@@ -10,8 +12,12 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      component: Home,
+      children: [
+        {path: '/', component: HomeGlobal, name: 'Home'},
+        {path: 'feed', component: HomeFeed},
+        {path: 'tag/:tag', component: HomeTag}
+      ]
     }, 
     {
       path: "/login",

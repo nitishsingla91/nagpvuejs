@@ -13,24 +13,13 @@
 
       <div class="col-md-9">
         <div class="feed-toggle">
-          <ul class="nav nav-pills outline-active">
-            <!-- <li class="nav-item">
-              <a class="nav-link disabled" href="">Your Feed</a>
-            </li> -->
-            <li class="nav-item">
-              <a class="nav-link active" href="">Global Feed</a>
-            </li>
-          </ul>
+         
+           <home-routing></home-routing>
         </div>
 
-        <article-preview
-          v-for="(article, index) in articles"
-          :key="article.slug + index"
-          :article="article"
-        >
-        </article-preview>
+       
 
-        
+        <router-view></router-view>
 
       </div>
 
@@ -39,14 +28,13 @@
           <p>Popular Tags</p>
 
           <div class="tag-list">
-            <a
+             <router-link
               v-for='tag in tags'
               :key="tag"
-              href="#"
-              class="tag-pill tag-default"
-            >
+             :to="{path: '/tag/'+tag}"
+              class="tag-pill tag-default">
               {{tag}}
-            </a>
+             </router-link>
           </div>
         </div>
       </div>
@@ -60,22 +48,22 @@
 import ApiService from '@/api'
 import {FETCH_TAGS, FETCH_ARTICLES} from '@/store/actions.type'
 import ArticlePreview from '@/components/ArticlePreview.vue'
+import HomeRouting from '@/components/HomeRouting.vue'
 export default {
   components: {
-    ArticlePreview
+    ArticlePreview,
+    HomeRouting
   },
   data () {
     return {}
   },
   created () {
      this.$store.dispatch(FETCH_TAGS)
-    this.$store.dispatch(FETCH_ARTICLES)
+    
     
   },
   computed: {
-    articles () {
-     return this.$store.state.home.articles
-    },
+   
     tags () {
        return this.$store.state.home.tags
     }
