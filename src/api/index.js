@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
+import {getJWTFromStorage} from '@/api/storage'
 
 export const API_URL = 'https://conduit.productionready.io/api';
 
@@ -11,11 +11,13 @@ const ApiService = {
     Vue.axios.defaults.baseURL = API_URL
   },
 
-  
+  setHeader () {
+    Vue.axios.defaults.headers.common['Authorization'] = `Token ${getJWTFromStorage()}`
+  },
 
   query (resource, params) {
     return Vue.axios
-      .get(resource,{params})
+      .get(resource, {params})
       .catch((error) => {
         throw new Error(`[RWV] ApiService ${error}`)
       })
@@ -54,17 +56,37 @@ const ApiService = {
 export default ApiService
 
 export const TagsService = {
-    get () {
-      return ApiService.get('tags')
-    }
+  get () {
+    return ApiService.get('tags')
   }
-   export const HomeArticles = {
-    get (params) {
-      return ApiService.get('articles', params)
-    }
+}
+
+export const HomeArticles = {
+  get (params) {
+    return ApiService.query('articles', params)
+  }
 }
 
 export const Article = {
   get () {
-   }
+
+  }
+}
+
+export const Auth = {
+  login (user) {
+    return ApiService.post('users/login', user)
+  },
+  register (user) {
+    return ApiService.post('users', user)
+  },
+  get () {
+    return ApiService.get('user')
+  },
+  put (user) {
+    return ApiService.put('user', user)
+  }
+}
+
+export const User = {
 }

@@ -4,30 +4,20 @@
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign in</h1>
-          <p class="text-xs-center"><a href="">Need an account?</a></p>
-
-          <ul class="error-messages">
-            <li v-for="error in errors">{{error.message}}</li>
+          <p class="text-xs-center">
+            <router-link :to="{path: '/register'}">Need an account?</router-link>
+          </p>
+          <ul class="error-messages" v-if="errors">
+            <li v-for="(val, key) in errors" :key="key">{{key + val}}</li>
           </ul>
-
-          <form>
+          <form @submit.prevent="login">
             <fieldset class="form-group">
-              <input
-                v-model="email"
-                class="form-control form-control-lg"
-                type="text"
-                placeholder="Email"
-              />
+              <input type="text" v-model="email" placeholder="Email" class="form-control form-control-lg">
             </fieldset>
             <fieldset class="form-group">
-              <input
-                v-model="password"
-                class="form-control form-control-lg"
-                type="password"
-                placeholder="Password"
-              />
+              <input type="password" v-model="password" placeholder="Password" class="form-control form-control-lg">
             </fieldset>
-            <button @click="login" class="btn btn-lg btn-primary pull-xs-right">
+            <button class="btn btn-lg btn-primary pull-xs-right">
               Sign in
             </button>
           </form>
@@ -36,28 +26,35 @@
     </div>
   </div>
 </template>
-
 <script>
+import {LOGIN_ACCOUNT, LOGOUT_ACCOUNT} from '@/store/actions.type.js'
+import {mapState} from 'vuex'
 export default {
-  data: function() {
+  data () {
     return {
-      email: "",
-      password: "",
-      errors: []
-    };
+      email: '',
+      password: ''
+    }
+  },
+  computed: {
+    ...mapState({
+      errors: state => state.authentication.errors
+    })
   },
   methods: {
-    login() {
-      this.$store.dispatch("users/loginUser", {
-        email: this.email,
-        password: this.password
-      }).then(() => {
-        this.errors = []
-      })
-      .catch( err => {
-        this.errors.push(err);
-      })
+    login () {
+      const {email, password} = this
+      this.$store.dispatch(LOGIN_ACCOUNT, {user: {email, password}})
+        .then(() => {
+          this.$router.push({name: 'Home'})
+        })
+    },
+    logout () {
+      this.$store.dispatch(LOGOUT_ACCOUNT)
     }
+  },
+  created () {
+    this.logout()
   }
-};
+}
 </script>
