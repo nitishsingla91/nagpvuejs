@@ -47,11 +47,13 @@ export default new Router({
     {
       path: "/articles/:article_slug",
       name: "article",
+      props: true,
       component: () => import("@/views/Article.vue")
     },
     {
       path: "/:username",
       name: "profile",
+      props: true,
       component: () => import("@/views/Profile.vue")
     }
   ]
