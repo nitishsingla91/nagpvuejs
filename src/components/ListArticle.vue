@@ -1,6 +1,6 @@
 <template>
   <div>
-   <template v-if="articles.isLoading">
+    <template v-if="articles.isLoading">
       <div class="article-preview">
         Loading...
       </div>
@@ -21,20 +21,18 @@
   </div>
 </template>
 <script>
-import ArticlePreview from '@/components/ArticlePreview.vue'
-import {FETCH_FEED_ARTICLES} from '@/store/actions.type'
 export default {
-
-  components: {
-    ArticlePreview
-  },
-  created () {
-    this.$store.dispatch(FETCH_FEED_ARTICLES)
-  },
-  computed: {
-    articles () {
-      return this.$store.state.home.articles
+  props: {
+    articles: {
+      type: Object,
+      default: () => {
+        return {
+          isLoading: false,
+          data: [],
+          error: ''
+        }
+      }
     }
   }
- }
+}
 </script>

@@ -64,12 +64,24 @@ export const TagsService = {
 export const HomeArticles = {
   get (params) {
     return ApiService.query('articles', params)
+  },
+  getFeed (params) {
+    return ApiService.query('articles/feed', params)
   }
 }
 
 export const Article = {
-  get () {
-
+  get (slug) {
+    return ApiService.get(`articles/${slug}`)
+  },
+  getComment (slug) {
+    ApiService.get(`articles/${slug}/comments`)
+  },
+  favorite (slug) {
+    return ApiService.post(`articles/${slug}/favorite`)
+  },
+  unFavorite (slug) {
+    return ApiService.delete(`articles/${slug}/favorite`)
   }
 }
 

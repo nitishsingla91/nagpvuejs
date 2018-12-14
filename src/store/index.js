@@ -4,6 +4,7 @@ import users from "./modules/user";
 import articles from "./modules/articles";
 import home from "@/store/modules/home";
 import authentication from '@/store/modules/authuser'
+import article from '@/store/modules/article'
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     users,
     articles,
     home,
-    authentication
+    authentication,
+    article
   }
 });
 

@@ -14,14 +14,9 @@ if (process.env.NODE_ENV === "development") {
 ApiService.init()
 
 
-store.dispatch('CHECK_AUTH')
-  .then(() => {
-    /* eslint-disable no-new */
-    new Vue({
-      el: '#app',
-      store,
-      router,
-      components: { App },
-      template: '<App/>'
-    })
-  })
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount("#app");
+
