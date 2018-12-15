@@ -1,81 +1,131 @@
 <template>
   <div class="profile-page">
-    <div class="user-info">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12 col-md-10 offset-md-1">
-            <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
-            <h4>Eric Simons</h4>
-            <p>
-              Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda
-              looks like Peeta from the Hunger Games
-            </p>
-            <button class="btn btn-sm btn-outline-secondary action-btn">
-              <i class="ion-plus-round"></i> &nbsp; Follow Eric Simons
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
+  <div class="user-info">
     <div class="container">
       <div class="row">
-        <div class="col-xs-12 col-md-10 offset-md-1">
-          <div class="articles-toggle">
-            <ul class="nav nav-pills outline-active">
-              <li class="nav-item">
-                <a class="nav-link active" href="">My Articles</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="">Favorited Articles</a>
-              </li>
-            </ul>
-          </div>
 
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href=""><img src="http://i.imgur.com/Qr71crq.jpg"/></a>
-              <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 29
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>How to build webapps that scale</h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-            </a>
+        <template v-if="userLoading">
+          <div class="col-xs-12 col-md-10 offset-md-1">
+            Is loading...
           </div>
+        </template>
+        <template v-else>
+          <div class="col-xs-12 col-md-10 offset-md-1">
+            <img :src="userImage" class="user-img" />
+            <h4>{{user.username}}</h4>
+            <p>
+              {{user.bio}}
+            </p>
+            <template v-if="!isCurrentUser">
+              <button @click="toggleFollow" class="btn btn-sm btn-outline-secondary action-btn">
+                <i :class="user.following ? 'ion-minus' : 'ion-plus'"></i>
+                &nbsp;
+                {{buttonFollowText}}
+              </button>
+            </template>
+            <template v-else>
+              <router-link :to="{name: 'Setting'}" class="btn btn-sm btn-outline-secondary action-btn">
+                <i class="ion-gear-a"></i> Edit Profile Settings
+              </router-link>
+            </template>
+          </div>
+        </template>
 
-          <div class="article-preview">
-            <div class="article-meta">
-              <a href=""><img src="http://i.imgur.com/N4VcUeJ.jpg"/></a>
-              <div class="info">
-                <a href="" class="author">Albert Pai</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 32
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>
-                The song you won't ever stop singing. No matter how hard you
-                try.
-              </h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-              <ul class="tag-list">
-                <li class="tag-default tag-pill tag-outline">Music</li>
-                <li class="tag-default tag-pill tag-outline">Song</li>
-              </ul>
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-10 offset-md-1">
+        <div class="articles-toggle">
+         
+          <ul class="nav nav-pills outline-active">
+            <li class="nav-item">
+              <router-link :to="{name: 'MyArticles'}" exact-active-class="active" class="nav-link">Articles</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link :to="{name: 'MyFavorite'}" exact-active-class="active" class="nav-link">
+                Favorites
+              </router-link>
+            </li>
+          </ul>
+
+        </div>
+
+        <router-view></router-view>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
 </template>
+<script>
+import {FOLLOW_USER, UNFOLLOW_USER, FETCH_PROFILE, COPY_PROFILE} from '@/store/actions.type'
+import store from '@/store'
+
+export default {
+  components: {
+    
+  },
+  props: {
+    username: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.state.profile.user
+    },
+    userLoading () {
+      return this.$store.state.profile.isLoading
+    },
+    isCurrentUser () {
+      return store.state.authentication.user.username === this.user.username
+    },
+    userImage () {
+      return this.user.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'
+    },
+    buttonFollowText () {
+      if (this.user.following) return `Unfollow ${this.user.username}`
+      return `Follow ${this.user.username}`
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    const currentUsername = store.state.authentication.user.username
+    if (currentUsername === to.params.username) {
+      const {username, bio, image} = store.state.authentication.user
+      const user = {username, bio, image, following: false}
+      store.dispatch(COPY_PROFILE, user)
+    } else {
+      store.dispatch(FETCH_PROFILE, to.params.username)
+    }
+    next()
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (to.params.username === from.params.username) {
+      next()
+      return
+    }
+    const currentUsername = store.state.authentication.user.username
+    if (currentUsername === to.params.username) {
+      const {username, bio, image} = store.state.authentication.user
+      const user = {username, bio, image, following: false}
+      store.dispatch(COPY_PROFILE, user)
+    } else {
+      store.dispatch(FETCH_PROFILE, to.params.username)
+    }
+    next()
+  },
+  methods: {
+    toggleFollow () {
+      if (this.user.following) store.dispatch(UNFOLLOW_USER, this.user.username)
+      else store.dispatch(FOLLOW_USER, this.user.username)
+    }
+  }
+}
+</script>

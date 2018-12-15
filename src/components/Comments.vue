@@ -8,7 +8,7 @@
         <img :src="comment.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'" class="comment-author-img" />
       </a>
       &nbsp;
-      <router-link :to="{name: 'profile', params: {username: comment.author.username}}">{{comment.author.username}}</router-link>
+       <router-link :to="{name: 'MyArticles', params: {username: comment.author.username}}">{{comment.author.username}}</router-link>
       <span class="date-posted">{{comment.createdAt}}</span>
       <span v-if="isCurrentUser" class="mod-options" @click="removeComment">
         <i class="ion-trash-a"></i>

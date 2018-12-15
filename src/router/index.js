@@ -4,6 +4,8 @@ import Home from '@/views/Home'
 import HomeFeed from '@/views/HomeFeed'
 import HomeTag from '@/views/HomeTag'
 import HomeGlobal from '@/views/HomeGlobal'
+import MyArticles from '@/views/MyArticles'
+import MyFavorite from '@/views/MyFavorite'
 
 Vue.use(Router)
 
@@ -51,7 +53,11 @@ export default new Router({
       path: '/profile/:username',
       name: 'Profile',
       component: () => import("@/views/Profile.vue"),
-      props: true
+      props: true,
+      children: [
+        {path: '', component: MyArticles, name: 'MyArticles'},
+        {path: 'favorited', component: MyFavorite, name: 'MyFavorite'}
+      ]
     }
   ]
 })

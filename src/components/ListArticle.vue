@@ -15,23 +15,62 @@
     </template>
     <template v-else>
       <div class="article-preview">
-      No articles are here... yet.
-    </div>
+        No articles are here... yet.
+      </div>
     </template>
+   
+    <pagination v-model="offset" :pageCount="pageCount"></pagination>
   </div>
 </template>
 <script>
+import {FETCH_ARTICLES} from '@/store/actions.type'
+import Pagination from '@/components/Pagination'
+import ArticlePreview from '@/components/ArticlePreview'
 export default {
   props: {
-    articles: {
+    query: {
       type: Object,
-      default: () => {
-        return {
-          isLoading: false,
-          data: [],
-          error: ''
-        }
+      default: function () {
+        return {}
       }
+    },
+    limit: {
+      type: Number,
+      default: 10
+    }
+  },
+  data () {
+    return {
+      offset: 0
+    }
+  },
+  components: {
+    ArticlePreview,
+    Pagination
+  },
+  created () {
+    const query = Object.assign({}, this.query, {limit: this.limit, offset: this.offset})
+    this.$store.dispatch(FETCH_ARTICLES, query)
+  },
+  watch: {
+    offset () {
+      const query = this.queryString
+      this.$store.dispatch(FETCH_ARTICLES, query)
+    },
+    query () {
+      const query = this.queryString
+      this.$store.dispatch(FETCH_ARTICLES, query)
+    }
+  },
+  computed: {
+    articles () {
+      return this.$store.state.home.articles
+    },
+    pageCount () {
+      return Math.round(this.articles.articlesCount / this.limit)
+    },
+    queryString () {
+      return Object.assign({}, this.query, {limit: this.limit, offset: this.offset})
     }
   }
 }

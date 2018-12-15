@@ -1,11 +1,11 @@
 <template>
   <div class="article-preview">
-    <div class="article-meta">
+    <div class="article-data">
       <a href="profile.html">
         <img :src="article.author.image" />
       </a>
       <div class="info">
-        <a href="" class="author">{{article.author.username}}</a>
+        <router-link :to="{name: 'MyArticles', params: {username: article.author.username}}" class="author">{{article.author.username}}</router-link>
         <span class="date">{{article.createdAt}}</span>
       </div>
       <button
