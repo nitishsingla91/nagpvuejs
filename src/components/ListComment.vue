@@ -1,7 +1,7 @@
 <template>
   <div class="cards" v-if="comments.data.length">
-    <the-comment v-for="comment in comments.data" :key="comment.id" :slug="slug" class="card" :comment="comment">
-    </the-comment>
+    <comment v-for="comment in comments.data" :key="comment.id" :slug="slug" class="card" :comment="comment">
+    </comment>
   </div>
 </template>
 <script>

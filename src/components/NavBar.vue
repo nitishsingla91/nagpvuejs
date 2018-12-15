@@ -8,12 +8,12 @@
         </li>
         <template v-if="isLogin">
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'editor_new'}">
+            <router-link class="nav-link" :to="{ name: 'CreateArticle'}">
               <i class="ion-compose"></i>&nbsp; Create Post
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{name: 'settings'}" class="nav-link">
+            <router-link :to="{name: 'Setting'}" class="nav-link">
               <i class="ion-gear-a"></i>&nbsp;Settings
             </router-link>
           </li>
@@ -23,15 +23,15 @@
             </router-link>
           </li>
           <li class="nav-item">
-          <a href="#" @click="doLogout" class="nav-link"><i class="ion-log-out"></i> Logout</a>
+            <a href="#" @click="doLogout" class="nav-link"><i class="ion-log-out"></i> Logout</a>
           </li>
         </template>
         <template v-else>
           <li class="nav-item">
-            <router-link :to="{name: 'register'}" class="nav-link"><i class="ion-compose"></i> Sign up</router-link>
+            <router-link :to="{name: 'SignUp'}" class="nav-link"><i class="ion-compose"></i> Sign up</router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{name: 'login'}" class="nav-link"><i class="ion-compose"></i> Sign in</router-link>
+            <router-link :to="{name: 'SignIn'}" class="nav-link"><i class="ion-compose"></i> Sign in</router-link>
           </li>
         </template>
       </ul>

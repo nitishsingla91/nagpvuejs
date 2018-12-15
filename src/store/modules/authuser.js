@@ -5,7 +5,8 @@ import {
   LOGIN_ACCOUNT,
   LOGOUT_ACCOUNT,
   CHECK_AUTH,
-  SET_ERROR
+  SET_ERROR,
+  UPDATE_PROFILE
 } from '@/store/actions.type'
 import {
   SET_ACCOUNT,
@@ -32,18 +33,12 @@ const actions = {
 
   },
   [LOGIN_ACCOUNT] ({commit}, user) {
-    return new Promise((resolve, reject) => {
-      Auth.login(user)
-        .then(({data}) => {
-          commit(SET_ACCOUNT, data.user)
-          saveJWTToStorage(data.user.token)
-          ApiService.setHeader()
-          resolve()
-        })
-        .catch(({response}) => {
-          commit(SET_ERROR, response.data.errors)
-        })
-    })
+    return Auth.login(user)
+      .then(({data}) => {
+        commit(SET_ACCOUNT, data.user)
+        saveJWTToStorage(data.user.token)
+        ApiService.setHeader()
+      })
   },
   [LOGOUT_ACCOUNT] ({commit}) {
     removeJWTFromStorage()
@@ -76,6 +71,15 @@ const actions = {
           commit(SET_ERROR, response.data.errors)
         })
     })
+  },
+  [UPDATE_PROFILE] ({commit, state}, user) {
+    let {email, username, password, image, bio} = user
+    console.log(password, '?')
+    if (!password) password = state.user.password
+    return Auth.updateProfile({email, username, password, image, bio})
+      .then(({data}) => {
+        commit(SET_ACCOUNT, data.user)
+      })
   }
 }
 
@@ -95,8 +99,6 @@ const mutations = {
 }
 
 const gets = {
-
- 
 }
 
 export default {

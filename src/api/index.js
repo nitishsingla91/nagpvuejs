@@ -3,7 +3,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import {getJWTFromStorage} from '@/api/storage'
 
-export const API_URL = 'https://conduit.productionready.io/api';
+export const API_URL = 'https://conduit.productionready.io/api'
+
 
 const ApiService = {
   init () {
@@ -110,6 +111,9 @@ export const Auth = {
   },
   put (user) {
     return ApiService.put('user', user)
+  },
+  updateProfile (user) {
+    return ApiService.put('user', {user})
   }
 }
 

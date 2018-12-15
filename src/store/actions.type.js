@@ -1,3 +1,4 @@
+// Start with verbs because it's actions : )
 export const FETCH_TAGS = 'FETCH_TAGS'
 export const FETCH_ARTICLES = 'FETCH_ARTICLES'
 export const START_FETCH_ARTICLES = 'START_FETCH_ARTICLES'
@@ -13,3 +14,4 @@ export const FAVORITE_ARTICLE = 'FAVORITE_ARTICLE'
 export const UNFAVORITE_ARTICLE = 'UNFAVORITE_ARTICLE'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const REMOVE_COMMENT = 'REMOVE_COMMENT'
+export const UPDATE_PROFILE = 'UPDATE_PROFILE'

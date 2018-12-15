@@ -1,26 +1,23 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import users from "./modules/user";
-import articles from "./modules/articles";
-import home from "@/store/modules/home";
+import Vue from 'vue'
+import Vuex from 'vuex'
+import home from '@/store/modules/home'
 import authentication from '@/store/modules/authuser'
 import article from '@/store/modules/article'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
-
-export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
+const store = new Vuex.Store({
+  state: {
+  },
+  actions: {
+  },
+  mutations: {
+  },
   modules: {
-    users,
-    articles,
     home,
     authentication,
     article
   }
-});
+})
 
-
-
+export default store
