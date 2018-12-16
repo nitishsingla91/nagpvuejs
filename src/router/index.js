@@ -7,6 +7,7 @@ import HomeGlobal from '@/views/HomeGlobal'
 import MyArticles from '@/views/MyArticles'
 import MyFavorite from '@/views/MyFavorite'
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -21,18 +22,16 @@ export default new Router({
       ]
     },
     {
-      path: '/articles/:id',
+     
+      path: '/articles/:slug',
+      name: 'Article',
       component: () => import("@/views/Article.vue"),
       props: true
     },
     {
-      path: '/editor/',
-      name: 'CreateArticle',
-      component: () => import("@/views/ArticleEdit.vue")
-    },
-    {
-      path: '/editor/:id',
-      component: () => import("@/views/ArticleEdit.vue")
+      path: '/editor/:slug?',
+      name: 'Editor',
+      component: () => import("@/views/Editor.vue")
     },
     {
       path: '/login',

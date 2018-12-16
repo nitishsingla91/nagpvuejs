@@ -7,12 +7,15 @@ import {
   FAVORITE_ARTICLE,
   UNFAVORITE_ARTICLE,
   ADD_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_COMMENT,
+  DELETE_ARTICLE,
+  UPDATE_ARTICLE,
+  CREATE_ARTICLE
 } from '@/store/actions.type'
 import {
   START_LOAD_ARTICLE,
   END_LOAD_ARTICLE,
-  UPDATE_ARTICLE,
+  SET_ARTICLE,
   UPDATE_LIST_ARTICLE,
   UPDATE_COMMENT
 } from '@/store/mutations.type'
@@ -42,26 +45,36 @@ const state = {
 const actions = {
   [FETCH_ARTICLE] ({commit}, slug) {
     commit(START_LOAD_ARTICLE)
-    Article.get(slug)
+    return Article.get(slug)
       .then(({data}) => {
         commit(END_LOAD_ARTICLE, data.article)
       })
-      .catch()
+     
   },
   [FAVORITE_ARTICLE] ({commit}, slug) {
     Article.favorite(slug)
       .then(({data}) => {
         commit(UPDATE_LIST_ARTICLE, data.article, {root: true})
-        commit(UPDATE_ARTICLE, data.article)
+        commit(SET_ARTICLE, data.article)
       })
       .catch(({response}) => {
       })
+    },
+    [DELETE_ARTICLE] ({commit}, slug) {
+      return Article.deleteArticle(slug)
+    },
+    [UPDATE_ARTICLE] ({commit}, payload) {
+      const {slug, article} = payload
+      return Article.updateArticle(slug, article)
+    },
+    [CREATE_ARTICLE] ({commit}, article) {
+      return Article.createArticle(article)
   },
   [UNFAVORITE_ARTICLE] ({commit}, slug) {
     Article.unFavorite(slug)
       .then(({data}) => {
         commit(UPDATE_LIST_ARTICLE, data.article, {root: true})
-        commit(UPDATE_ARTICLE, data.article)
+        commit(SET_ARTICLE, data.article)
       })
       .catch(({response}) => {
       })
@@ -122,7 +135,7 @@ const mutations = {
       data: article
     }
   },
-  [UPDATE_ARTICLE] (state, article) {
+  [SET_ARTICLE] (state, article) {
     state.article.data = article
   },
   [UPDATE_COMMENT] (state, comments) {
