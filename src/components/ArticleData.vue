@@ -41,7 +41,8 @@ export default {
     article: {
       type: Object,
       required: true
-      },
+    }
+  },
   computed: {
     isAuthor () {
       return this.$store.state.authentication.user.username === this.article.author.username
@@ -53,7 +54,6 @@ export default {
         .then(() => {
           this.$router.push({name: 'Home'})
         })
-    }
     }
   }
 }
